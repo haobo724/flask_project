@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block Title %}
+    首页
+{% endblock %}
+{% block body %}
+
+{% if age > 18 %}
+    <div>大于18</div>
+{% elif age < 18 %}
+    <div>小于于18</div>
+{% else %}
+    <div>18</div>
+{% endif %}
+<ul>
+    {% for book in books %}
+    <li>{{ book }}</li>
+    {% endfor %}
+
+</ul>
+{% endblock %}

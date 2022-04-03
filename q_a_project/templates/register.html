@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}注册{% endblock %}
+
+
+{% block head %}{% endblock %}
+
+{% block body %}
+<div class="row mt-5">
+    <div class="col">
+    </div>
+    <div class="col">
+        <form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                    else.</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">确认密码</label>
+                <input type="email" class="form-control" id="conformPassword1" aria-describedby="emailHelp">
+
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">验证码</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="yanzhengma">
+                                    <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button">获取验证码</button>
+                </div>
+                </div>
+
+            </div>
+
+
+            <button type="submit" class="btn btn-primary btn-block">注册</button>
+        </form>
+
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+{% endblock %}

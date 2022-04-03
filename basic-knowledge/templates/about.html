@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block Title %}
+    关于
+{% endblock %}
+{% block body %}
+    <h1> 有点意思 {{ username }}</h1>
+    <h2> 字符长度 {{ username,username|length }}</h2>
+    <div> with join Filter {{ books|join(",") }}</div>
+    <div> no   join Filter {{ books }}</div>
+{% endblock %}
+
