@@ -20,7 +20,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_name = db.Column(db.String(200), nullable=False)
     user_password = db.Column(db.String(200), nullable=False)
-
+    email = db.Column(db.String(200),nullable=False,unique=True)
+    join_time = db.Column(db.String(200),nullable=False,default=datetime.now)
 
 class UserExtension(db.Model):
     __tablename__ = 'user_extension'

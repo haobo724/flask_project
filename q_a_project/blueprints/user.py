@@ -2,12 +2,13 @@ import random
 import string
 from datetime import datetime
 
-from flask import Blueprint,request,render_template
-from forms import LoginForm
+import wtforms
+from flask import Blueprint,request,render_template,redirect,url_for
+from forms import LoginForm,RegisterForm
 from flask_mail import Message
 from exts import mail,db
-from models import EmailCpatchaModel
-
+from models import EmailCpatchaModel,User
+from werkzeug.security import generate_password_hash,check_password_hash
 user_bp = Blueprint("user",__name__,url_prefix="/")
 
 
@@ -19,6 +20,16 @@ def login():
     else:
         form = LoginForm(request.form)
         if form.validate():
+            email = form.email.data
+            password = form.password.data
+            captcha_model = User.query.filter_by(email=email).first()
+            if not captcha_model :
+                # raise wtforms.ValidationError("无邮箱")
+                return redirect(url_for('user.login'))
+
+            if check_password_hash(password,captcha_model.user_password) :
+                # raise wtforms.ValidationError("密码错误")
+                return redirect(url_for('user.login'))
             return "登录成功"
         else:
             return "登录失败"
@@ -30,11 +41,21 @@ def register():
     if request.method =='GET':
         return render_template('register.html')
     else:
-        form = LoginForm(request.form)
+        form = RegisterForm(request.form)
+        print('收到')
         if form.validate():
-            return "登录成功"
+            email = form.email.data
+            # captcha = form.captcha.data
+            password = form.password.data
+            username = form.username.data
+            password_hash = generate_password_hash(password)
+            user = User(email=email,user_password=password_hash,user_name=username)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('user.login'))
         else:
-            return "登录失败"
+            return redirect(url_for('user.register'))
+
 # memcached /redis /sql
 @user_bp.route("/mail")
 def send_mail():
@@ -55,7 +76,7 @@ def get_captcha():
         mail.send(message)
         if captcha_model:
             captcha_model.captcha = captcha
-            captcha_model.create_time = datetime.now
+            captcha_model.create_time = datetime.now()
             db.session.commit()
         else:
             captcha_model = EmailCpatchaModel(email=email,captcha=captcha)
