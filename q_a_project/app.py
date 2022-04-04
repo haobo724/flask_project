@@ -1,6 +1,6 @@
 from flask import Blueprint, Flask,Response,request,session,render_template
 
-from exts import db
+from exts import db,mail
 from flask_migrate import Migrate
 import config
 from blueprints import qa_bp , user_bp ,others_bp
@@ -29,6 +29,7 @@ app.register_blueprint(user_bp)
 app.register_blueprint(others_bp)
 app.config.from_object(config)
 db.init_app(app)
+mail.init_app(app)
 migrate = Migrate(app,db)
 
 
