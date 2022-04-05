@@ -3,7 +3,7 @@ import string
 from datetime import datetime
 
 import wtforms
-from flask import Blueprint,request,render_template,redirect,url_for
+from flask import Blueprint,request,render_template,redirect,url_for,jsonify,session,flash
 from forms import LoginForm,RegisterForm
 from flask_mail import Message
 from exts import mail,db
@@ -22,18 +22,29 @@ def login():
         if form.validate():
             email = form.email.data
             password = form.password.data
-            captcha_model = User.query.filter_by(email=email).first()
-            if not captcha_model :
+            user = User.query.filter_by(email=email).first()
+            if not user :
+                flash('您尚未注册')
                 # raise wtforms.ValidationError("无邮箱")
                 return redirect(url_for('user.login'))
 
-            if check_password_hash(password,captcha_model.user_password) :
+            if check_password_hash(user.user_password,password) :
+                flash('密码错误')
+
                 # raise wtforms.ValidationError("密码错误")
                 return redirect(url_for('user.login'))
-            return "登录成功"
+            session['user_id']=user.id
+            return redirect('/')
         else:
-            return "登录失败"
+            flash('格式错误！')
 
+            return redirect(url_for('user.login'))
+
+
+@user_bp.route("/logout",methods=['GET'])
+def logout():
+    session.clear()
+    return redirect('/')
 
 
 @user_bp.route("/register",methods=['GET', 'POST'])
@@ -63,10 +74,10 @@ def send_mail():
     mail.send(message)
     return '成功'
 
-@user_bp.route("/captcha")
+@user_bp.route("/captcha",methods=['POST'])
 def get_captcha():
     captcha_pool = string.digits+string.ascii_letters
-    email = request.args.get("email")
+    email = request.form.get("email")
     captcha_model = EmailCpatchaModel.query.filter_by(email=email).first()
 
     if email:
@@ -83,6 +94,6 @@ def get_captcha():
             db.session.add(captcha_model)
             db.session.commit()
 
-        return '验证码发送成功'
+        return jsonify({'code':200})
     else:
-        return '请输入邮箱'
+        return jsonify({'code':400,'message':'请输入邮箱！'})

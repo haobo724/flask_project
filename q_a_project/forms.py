@@ -7,6 +7,11 @@ class LoginForm(wtforms.Form):
     email = wtforms.StringField(validators=[length(min=8, max=20)])
     password = wtforms.StringField(validators=[length(min=6, max=20) ])
 
+class QuestionForm(wtforms.Form):
+    # email = wtforms.StringField(validators=[length(min=5, max=20), email()])
+    title = wtforms.StringField(validators=[length(min=4, max=10)])
+    content = wtforms.StringField(validators=[length(min=4, max=200) ])
+
 
 class RegisterForm(wtforms.Form):
     # email = wtforms.StringField(validators=[length(min=5, max=20), email()])
@@ -21,9 +26,7 @@ class RegisterForm(wtforms.Form):
         email = self.email.data
         captcha_model = EmailCpatchaModel.query.filter_by(email=email).first()
         if not captcha_model or captcha_model.captcha.lower()!=captcha.lower():
-            print(captcha_model.captcha.lower())
-            print(captcha.lower())
-            print(captcha_model)
+
             raise wtforms.ValidationError("邮箱验证码错误")
         else:
 
@@ -33,7 +36,6 @@ class RegisterForm(wtforms.Form):
         email = field.data
         User_model = User.query.filter_by(email=email).first()
         if User_model:
-            print('邮箱已存在')
             raise wtforms.ValidationError("邮箱已存在")
         else:
             print('email 验证通过')

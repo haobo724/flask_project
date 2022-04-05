@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}问答详情{% endblock %}
+
+
+{% block head %}{% endblock %}
+
+{% block body %}
+<div class="row" style="margin-top 20px">
+    <div class="col">
+    </div>
+    <div class="col-10">
+        <h3 class="page-title">{{ question.title }}</h3>
+        <p class="question-info">
+            <span>作者：{{ question.author.user_name }}</span>
+            <span>时间：{{ question.create_time }}</span>
+        </p>
+        <hr>
+        <p class="question-content">{{ question.content }}</p>
+        <hr>
+        <div class="col">
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

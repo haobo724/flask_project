@@ -1,6 +1,6 @@
 from flask import Blueprint, Flask,Response,request,session,render_template
 from exts import db
-from models import Article, User, UserExtension
+from models import User, UserExtension
 
 app = Blueprint("other",__name__,url_prefix="/")
 
@@ -40,31 +40,9 @@ def get_session():
 
 #  -------------------数据库相关---------------------------
 
-@app.route('/article')
-def article_view():
-    artice = Article(title='haha',content ='xxxxx')
-    db.session.add(artice)
-    db.session.commit()
-    # filter_result = Article.query.filter_by(id=1)[0]
-    # filter_result.title='qqq'
-    # db.session.commit()
 
-    # print(filter_result.title)
-    # print(filter_result)
-    # Article.query.filter_by(id=1).delete()
-    # db.session.commit()
-    return "操作成功"
 
-@app.route('/otm')
-def otm():
-    article = Article(title='otm添加的文章',content='xxx')
-    user = User(user_name='otm添加的name',user_password='otm添加的password')
-    article.author = user
-    db.session.add(article)
-    db.session.commit()
-    #反向引用
-    print(user.articles[0].title)
-    return "操作成功"
+
 
 @app.route('/oto')
 def oto():

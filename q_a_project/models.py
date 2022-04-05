@@ -2,18 +2,34 @@ from datetime import datetime
 
 from exts import db
 
-class Article(db.Model):
-    __tablename__ = 'article'
+class QuestionModel(db.Model):
+    __tablename__ = 'question'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
     # 外键，db.ForeignKey("表名.字段名")，数据库层面不推荐直接访问
     author_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    create_time = db.Column(db.String(200),nullable=False,default=datetime.now)
+    # < img class ="side-question-avatar" src="{{ url_for('static',filename='image/PC181211.jpg') }}" alt="" >
 
     # relationship
 
-    author = db.relationship("User", backref='articles')
+    author = db.relationship("User", backref='questions')
 
+class Answer(db.Model):
+    __tablename__ = 'answer'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    # 外键，db.ForeignKey("表名.字段名")，数据库层面不推荐直接访问
+    author_id = db.Column(db.Integer, db.ForeignKey("question.id"))
+    question_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    create_time = db.Column(db.String(200),nullable=False,default=datetime.now)
+
+    # relationship
+
+    author = db.relationship("User", backref='answers')
+    question = db.relationship("QuestionModel", backref='answers')
 
 class User(db.Model):
     __tablename__ = 'user'
