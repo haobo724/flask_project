@@ -1,5 +1,5 @@
 import wtforms
-from wtforms.validators import length, email,EqualTo
+from wtforms.validators import length,EqualTo
 from models import EmailCpatchaModel,User
 
 class LoginForm(wtforms.Form):
@@ -12,6 +12,9 @@ class QuestionForm(wtforms.Form):
     title = wtforms.StringField(validators=[length(min=4, max=10)])
     content = wtforms.StringField(validators=[length(min=4, max=200) ])
 
+class CommentForm(wtforms.Form):
+    # email = wtforms.StringField(validators=[length(min=5, max=20), email()])
+    content = wtforms.StringField(validators=[length(min=4, max=100 )])
 
 class RegisterForm(wtforms.Form):
     # email = wtforms.StringField(validators=[length(min=5, max=20), email()])
